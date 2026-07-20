@@ -67,11 +67,12 @@ router.post('/checkout', async (req, res) => {
 
     const total = cart.reduce((sum, i) => sum + i.price * i.qty, 0);
 
-    const orderResult = await pool.query(
-      `INSERT INTO orders (tenant_id, customer_name, customer_phone, delivery_address, special_notes, payment_method, status, total_amount)
-       VALUES ($1, $2, $3, $4, $5, $6, 'Received', $7) RETURNING order_id`,
-      [tenant.tenant_id, name, phone, address, notes || '', payment, total.toFixed(2)]
-    );
+   const orderResult = await pool.query(
+  `INSERT INTO orders (tenant_id, customer_name, customer_phone, delivery_address, special_notes, payment_method, status, total_amount, created_at)
+   VALUES ($1, $2, $3, $4, $5, $6, 'Received', $7, NOW()) RETURNING order_id`,
+  [tenant.tenant_id, name, phone, address, notes || '', payment, total.toFixed(2)]
+);
+    
     const orderId = orderResult.rows[0].order_id;
 
     for (const item of cart) {
