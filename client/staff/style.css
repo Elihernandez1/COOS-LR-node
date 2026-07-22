@@ -1,0 +1,209 @@
+:root{
+  --ink:#161311;
+  --paper:#f6f1e9;
+  --paper-dim:#c9c2b4;
+  --line: rgba(246,241,233,0.14);
+  --accent:#e8751a;
+  --accent-soft: rgba(232,117,26,0.16);
+  --received:#e8751a;
+  --progress:#3d8bd6;
+  --ready:#3fa66a;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  min-height:100vh;
+}
+
+/* ---------- Login screen ---------- */
+#loginScreen{
+  min-height:100vh;
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+}
+.login-card{
+  width:100%; max-width:360px;
+  background:#1e1a17;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:36px 30px;
+}
+.login-card h1{
+  font-family:'Fraunces',serif;
+  font-size:26px; font-weight:600;
+  margin:0 0 6px;
+}
+.login-card p{
+  color:var(--paper-dim);
+  font-size:13px;
+  margin:0 0 26px;
+}
+.field{margin-bottom:16px;}
+.field label{
+  display:block; font-size:12px; color:var(--paper-dim); margin-bottom:6px;
+}
+.field input{
+  width:100%; padding:11px 12px;
+  background:#161311;
+  border:1px solid var(--line);
+  border-radius:4px;
+  color:var(--paper);
+  font-family:'Inter',sans-serif;
+  font-size:14px;
+}
+.field input:focus{outline:none; border-color:var(--accent);}
+.primary-btn{
+  width:100%;
+  padding:13px;
+  background:var(--accent);
+  color:#161311;
+  border:none;
+  border-radius:4px;
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  margin-top:6px;
+}
+.primary-btn:hover{filter:brightness(1.08);}
+.login-error{
+  color:#e8756e; font-size:13px; margin-top:12px; display:none;
+}
+
+/* ---------- App shell ---------- */
+#appScreen{display:none;}
+header{
+  padding:20px 28px;
+  border-bottom:1px solid var(--line);
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:14px;
+}
+.brand-mini{display:flex; align-items:center; gap:12px;}
+.brand-mini .dot{width:8px; height:8px; border-radius:50%; background:var(--accent);}
+header h1{
+  font-family:'Fraunces',serif; font-size:20px; font-weight:600; margin:0;
+}
+nav{display:flex; gap:6px;}
+.nav-btn{
+  font-family:'Space Grotesk',sans-serif; font-size:13px;
+  background:none; border:1px solid var(--line); color:var(--paper-dim);
+  padding:8px 16px; border-radius:100px; cursor:pointer;
+}
+.nav-btn.active{background:var(--accent); color:#161311; border-color:var(--accent);}
+.logout-btn{
+  background:none; border:none; color:var(--paper-dim); font-size:13px; cursor:pointer;
+  font-family:'Inter',sans-serif;
+}
+.logout-btn:hover{color:var(--paper);}
+
+main{padding:28px; max-width:1240px; margin:0 auto;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* ---------- Stat strip ---------- */
+.stat-strip{
+  display:flex; gap:14px; margin-bottom:28px; flex-wrap:wrap;
+}
+.stat{
+  flex:1; min-width:130px;
+  background:#1e1a17; border:1px solid var(--line); border-radius:6px;
+  padding:16px 18px;
+}
+.stat .n{font-family:'Space Grotesk',sans-serif; font-size:28px; font-weight:700;}
+.stat .l{font-size:11px; color:var(--paper-dim); text-transform:uppercase; letter-spacing:0.08em; margin-top:2px;}
+
+/* ---------- Ticket rail (kanban) ---------- */
+.rail{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:18px;
+}
+@media (max-width:860px){ .rail{grid-template-columns:1fr;} }
+.rail-col h2{
+  font-family:'Space Grotesk',sans-serif; font-size:13px;
+  text-transform:uppercase; letter-spacing:0.1em;
+  display:flex; align-items:center; gap:8px;
+  margin:0 0 14px;
+}
+.col-dot{width:8px; height:8px; border-radius:50%;}
+.col-received .col-dot{background:var(--received);}
+.col-progress .col-dot{background:var(--progress);}
+.col-ready .col-dot{background:var(--ready);}
+
+.ticket{
+  background:var(--paper);
+  color:var(--ink);
+  border-radius:3px;
+  padding:16px 16px 14px;
+  margin-bottom:14px;
+  position:relative;
+  font-family:'Space Grotesk',sans-serif;
+}
+.ticket::before{
+  content:'';
+  position:absolute; top:0; left:0; right:0; height:4px;
+  border-radius:3px 3px 0 0;
+}
+.col-received .ticket::before{background:var(--received);}
+.col-progress .ticket::before{background:var(--progress);}
+.col-ready .ticket::before{background:var(--ready);}
+.ticket-top{
+  display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px;
+}
+.ticket-id{font-size:12px; color:rgba(22,19,17,0.5);}
+.ticket-total{font-weight:700; font-size:15px;}
+.ticket-name{
+  font-family:'Fraunces',serif; font-size:17px; font-weight:500; margin-bottom:4px;
+}
+.ticket-meta{font-family:'Inter',sans-serif; font-size:12px; color:rgba(22,19,17,0.6); margin-bottom:10px;}
+.ticket-notes{
+  font-family:'Inter',sans-serif; font-size:12px; font-style:italic;
+  background:rgba(232,117,26,0.1); padding:6px 10px; border-radius:3px; margin-bottom:12px;
+}
+.ticket-actions{display:flex; gap:8px;}
+.advance-btn{
+  flex:1; padding:9px; border:none; border-radius:3px;
+  background:var(--ink); color:var(--paper);
+  font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:12px; cursor:pointer;
+}
+.cancel-btn{
+  padding:9px 12px; border:1px solid rgba(22,19,17,0.2); border-radius:3px;
+  background:none; color:rgba(22,19,17,0.5);
+  font-size:12px; cursor:pointer;
+}
+.rail-empty{
+  color:var(--paper-dim); font-size:13px; padding:20px 0; text-align:center;
+  border:1px dashed var(--line); border-radius:6px;
+}
+
+/* ---------- Menu view ---------- */
+.menu-table{width:100%; border-collapse:collapse;}
+.menu-table th{
+  text-align:left; font-family:'Space Grotesk',sans-serif; font-size:11px;
+  text-transform:uppercase; letter-spacing:0.08em; color:var(--paper-dim);
+  padding:0 10px 10px; border-bottom:1px solid var(--line);
+}
+.menu-table td{
+  padding:12px 10px; border-bottom:1px solid var(--line); font-size:14px;
+}
+.avail-toggle{
+  font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700;
+  padding:5px 12px; border-radius:100px; border:none; cursor:pointer;
+}
+.avail-on{background:var(--accent-soft); color:var(--accent);}
+.avail-off{background:rgba(255,255,255,0.06); color:var(--paper-dim);}
+
+/* ---------- History view ---------- */
+.history-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:14px 0; border-bottom:1px solid var(--line); font-size:14px;
+}
+.status-tag{
+  font-family:'Space Grotesk',sans-serif; font-size:11px; font-weight:700;
+  padding:4px 12px; border-radius:100px;
+}
+.status-tag.Completed{background:rgba(63,166,106,0.16); color:var(--ready);}
+.status-tag.Cancelled{background:rgba(232,117,110,0.16); color:#e8756e;}

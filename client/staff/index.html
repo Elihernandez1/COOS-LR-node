@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COOS-LR | Staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Staff sign in</h1>
+    <p>Enter your restaurant credentials to view orders.</p>
+    <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="staff@luigi.com" /></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" /></div>
+    <button class="primary-btn" id="loginBtn">Sign in</button>
+    <div class="login-error" id="loginError">Invalid email or password.</div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="appScreen">
+  <header>
+    <div class="brand-mini">
+      <span class="dot"></span>
+      <h1 id="staffName">Staff dashboard</h1>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="dashboard">Orders</button>
+      <button class="nav-btn" data-view="menu">Menu</button>
+      <button class="nav-btn" data-view="history">History</button>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">Sign out</button>
+  </header>
+
+  <main>
+    <!-- Dashboard -->
+    <div class="view active" id="view-dashboard">
+      <div class="stat-strip">
+        <div class="stat"><div class="n" id="statReceived">0</div><div class="l">Received</div></div>
+        <div class="stat"><div class="n" id="statProgress">0</div><div class="l">In progress</div></div>
+        <div class="stat"><div class="n" id="statReady">0</div><div class="l">Ready</div></div>
+      </div>
+      <div class="rail">
+        <div class="rail-col col-received">
+          <h2><span class="col-dot"></span>Received</h2>
+          <div id="colReceived"></div>
+        </div>
+        <div class="rail-col col-progress">
+          <h2><span class="col-dot"></span>In progress</h2>
+          <div id="colProgress"></div>
+        </div>
+        <div class="rail-col col-ready">
+          <h2><span class="col-dot"></span>Ready</h2>
+          <div id="colReady"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Menu -->
+    <div class="view" id="view-menu">
+      <table class="menu-table">
+        <thead><tr><th>Item</th><th>Category</th><th>Price</th><th>Status</th></tr></thead>
+        <tbody id="menuBody"></tbody>
+      </table>
+    </div>
+
+    <!-- History -->
+    <div class="view" id="view-history">
+      <div id="historyList"></div>
+    </div>
+  </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
