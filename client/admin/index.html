@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COOS-LR | Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <h1>Admin sign in</h1>
+    <p>Enter your control-room credentials to manage the platform.</p>
+    <div class="field"><label>Email</label><input id="loginEmail" type="email" placeholder="admin@coos-lr.com" /></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" /></div>
+    <button class="primary-btn" id="loginBtn">Sign in</button>
+    <div class="login-error" id="loginError">Invalid email or password.</div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="appScreen">
+  <header>
+    <div class="brand-mini">
+      <span class="dot"></span>
+      <h1 id="brandTitle">Admin dashboard</h1>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+      <button class="nav-btn" data-view="onboard">Onboard</button>
+      <button class="nav-btn" data-view="branding">Branding</button>
+      <button class="nav-btn" data-view="users">Staff &amp; Users</button>
+      <button class="nav-btn" data-view="analytics">Analytics</button>
+    </nav>
+    <button class="logout-btn" id="logoutBtn">Sign out</button>
+  </header>
+
+  <main>
+    <!-- Dashboard -->
+    <div class="view active" id="view-dashboard">
+      <div class="stat-strip">
+        <div class="stat"><div class="n" id="statTenants">0</div><div class="l">Tenants</div></div>
+        <div class="stat"><div class="n" id="statOrders">0</div><div class="l">Orders (all time)</div></div>
+        <div class="stat"><div class="n" id="statRevenue">$0.00</div><div class="l">Revenue (completed)</div></div>
+        <div class="stat"><div class="n" id="statStaff">0</div><div class="l">Staff accounts</div></div>
+      </div>
+
+      <div class="ledger">
+        <div class="ledger-top">
+          <h2>Restaurant tenants</h2>
+          <span class="ledger-count" id="tenantCount">0 tenants</span>
+        </div>
+        <table class="ledger-table">
+          <thead>
+            <tr><th>Restaurant</th><th>Subdomain</th><th>Owner</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody id="tenantBody">
+            <tr><td colspan="5" class="ledger-empty">Loading tenants…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Onboard -->
+    <div class="view" id="view-onboard">
+      <div class="ticket-form-wrap">
+        <h2>Onboard a new restaurant</h2>
+        <p class="form-sub">Creates the tenant record and a starter branding row (orange / teal, editable in Branding).</p>
+        <form id="onboardForm">
+          <div class="ticket-grid">
+            <div class="field"><label>Restaurant name</label><input id="obName" type="text" required placeholder="Luigi's Pizzeria" /></div>
+            <div class="field"><label>Subdomain</label><input id="obSubdomain" type="text" required placeholder="luigi" /></div>
+            <div class="field"><label>Owner name</label><input id="obOwner" type="text" required placeholder="Luigi Romano" /></div>
+            <div class="field"><label>Phone</label><input id="obPhone" type="tel" placeholder="(555) 555-0100" /></div>
+            <div class="field field-span2"><label>Address</label><input id="obAddress" type="text" placeholder="123 Main St, Springfield" /></div>
+          </div>
+          <button class="primary-btn primary-btn-inline" id="onboardBtn" type="submit">Onboard restaurant</button>
+          <div class="form-note" id="onboardNote"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Branding -->
+    <div class="view" id="view-branding">
+      <div class="branding-layout">
+        <div class="ticket-form-wrap">
+          <h2>Branding editor</h2>
+          <p class="form-sub">Overwrites the tenant's saved branding — there's no live read-back yet, so confirm colors before saving.</p>
+          <form id="brandingForm">
+            <div class="field"><label>Restaurant</label><select id="brTenant" required></select></div>
+            <div class="ticket-grid">
+              <div class="field">
+                <label>Primary color</label>
+                <div class="color-input">
+                  <input type="color" id="brPrimary" value="#e8751a" />
+                  <input type="text" id="brPrimaryHex" value="#e8751a" />
+                </div>
+              </div>
+              <div class="field">
+                <label>Secondary color</label>
+                <div class="color-input">
+                  <input type="color" id="brSecondary" value="#0e9f8e" />
+                  <input type="text" id="brSecondaryHex" value="#0e9f8e" />
+                </div>
+              </div>
+              <div class="field"><label>Logo initials</label><input id="brLogoText" type="text" maxlength="3" placeholder="LP" /></div>
+            </div>
+            <button class="primary-btn primary-btn-inline" id="brandingBtn" type="submit">Save branding</button>
+            <div class="form-note" id="brandingNote"></div>
+          </form>
+        </div>
+
+        <div class="brand-preview">
+          <p class="brand-preview-label">Live preview</p>
+          <div class="brand-preview-card" id="previewCard">
+            <div class="brand-preview-logo" id="previewLogo">LP</div>
+            <div>
+              <div class="brand-preview-name" id="previewName">Restaurant name</div>
+              <div class="brand-preview-tag">Order ticket #0000</div>
+            </div>
+          </div>
+          <button class="brand-preview-btn" id="previewBtn">View Menu &amp; Order</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Staff & Users -->
+    <div class="view" id="view-users">
+      <div class="branding-layout">
+        <div class="ticket-form-wrap">
+          <h2>Create staff account</h2>
+          <form id="userForm">
+            <div class="field"><label>Restaurant</label><select id="uTenant" required></select></div>
+            <div class="field"><label>Full name</label><input id="uName" type="text" required placeholder="Maria Romano" /></div>
+            <div class="field"><label>Email</label><input id="uEmail" type="email" required placeholder="staff@luigi.com" /></div>
+            <div class="field"><label>Temporary password</label><input id="uPassword" type="text" required placeholder="demo123" /></div>
+            <button class="primary-btn primary-btn-inline" id="userBtn" type="submit">Create account</button>
+            <div class="form-note" id="userNote"></div>
+          </form>
+        </div>
+
+        <div class="ledger">
+          <div class="ledger-top">
+            <h2>All accounts</h2>
+            <span class="ledger-count" id="userCount">0 accounts</span>
+          </div>
+          <table class="ledger-table">
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Restaurant</th></tr></thead>
+            <tbody id="userBody">
+              <tr><td colspan="4" class="ledger-empty">Loading accounts…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics -->
+    <div class="view" id="view-analytics">
+      <div class="stat-strip">
+        <div class="stat stat-wide"><div class="n" id="anTotalOrders">0</div><div class="l">Total orders (all tenants)</div></div>
+        <div class="stat stat-wide"><div class="n" id="anTotalRevenue">$0.00</div><div class="l">Total revenue (completed)</div></div>
+      </div>
+      <div class="ledger">
+        <div class="ledger-top"><h2>Per-restaurant breakdown</h2></div>
+        <table class="ledger-table">
+          <thead><tr><th>Restaurant</th><th>Subdomain</th><th>Status</th><th class="num">Orders</th><th class="num">Revenue</th></tr></thead>
+          <tbody id="analyticsBody">
+            <tr><td colspan="5" class="ledger-empty">Loading analytics…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

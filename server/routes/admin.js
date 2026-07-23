@@ -52,7 +52,20 @@ router.post('/onboard', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
-
+// GET /api/admin/branding/:tenantId — fetch current branding for pre-fill
+router.get('/branding/:tenantId', async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT tenant_id, primary_color, secondary_color, logo_text FROM tenant_branding WHERE tenant_id = $1',
+      [req.params.tenantId]
+    );
+    if (result.rows.length === 0) return res.status(404).json({ error: 'No branding found for this tenant' });
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 // PUT /api/admin/branding/:tenantId — update branding
 router.put('/branding/:tenantId', async (req, res) => {
   const { primary_color, secondary_color, logo_text } = req.body;
@@ -74,8 +87,8 @@ router.put('/branding/:tenantId', async (req, res) => {
 router.post('/tenant/:tenantId/toggle', async (req, res) => {
   try {
     const result = await pool.query(
-      'UPDATE tenants SET is_active = NOT is_active::boolean WHERE tenant_id = $1 RETURNING is_active, name',
-      [req.params.tenantId]
+'UPDATE tenants SET is_active = (1 - is_active) WHERE tenant_id = $1 RETURNING is_active, name',      
+[req.params.tenantId]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Tenant not found' });
     res.json({ message: 'Tenant status updated', tenant: result.rows[0] });
