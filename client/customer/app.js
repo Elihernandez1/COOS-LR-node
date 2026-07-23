@@ -1,16 +1,51 @@
 const params = new URLSearchParams(location.search);
-const SUBDOMAIN = params.get('r') || 'pizzeria-luigi';
+const SUBDOMAIN = params.get('r');
 const API = '/api/customer';
 
 const THEME_MAP = { 'pizzeria-luigi':'theme-italian', 'sakura-sushi':'theme-japan', 'brew-and-bean':'theme-coffee' };
-document.body.classList.add(THEME_MAP[SUBDOMAIN] || 'theme-italian');
-
-let tenant = null, branding = null, allItems = [], categories = [];
-let currentCat = 'All', currentQ = '';
-let cart = {}; // item_id -> {name, price, qty}
 
 const el = id => document.getElementById(id);
 const money = n => '$' + Number(n).toFixed(2);
+
+/* ============================================================
+   PICKER MODE — no ?r= param, show "choose a restaurant" screen
+   ============================================================ */
+async function loadPicker(){
+  const grid = el('pickerGrid');
+  try{
+    const res = await fetch(`${API}/restaurants`);
+    const restaurants = await res.json();
+    if(!res.ok || restaurants.length === 0){
+      grid.innerHTML = `<div class="empty-state">No restaurants are available to order from right now.</div>`;
+      return;
+    }
+    grid.innerHTML = '';
+    restaurants.forEach(r => {
+      const card = document.createElement('a');
+      card.className = 'picker-card';
+      card.href = `/customer/?r=${encodeURIComponent(r.subdomain)}`;
+      const primary = r.primary_color || '#e8751a';
+      card.innerHTML = `
+        <div class="picker-card-logo" style="background:${primary};">${r.logo_text || r.name.slice(0,2).toUpperCase()}</div>
+        <div class="picker-card-body">
+          <div class="picker-card-name">${r.name}</div>
+          <div class="picker-card-address">${r.address || ''}</div>
+        </div>
+        <div class="picker-card-arrow">&rarr;</div>
+      `;
+      grid.appendChild(card);
+    });
+  }catch(err){
+    grid.innerHTML = `<div class="empty-state">Could not load restaurants. Please try again.</div>`;
+  }
+}
+
+/* ============================================================
+   ORDER MODE — ?r=<subdomain> present, existing menu/cart flow
+   ============================================================ */
+let tenant = null, branding = null, allItems = [], categories = [];
+let currentCat = 'All', currentQ = '';
+let cart = {}; // item_id -> {name, price, qty}
 
 function applyBranding(){
   if(!branding) return;
@@ -29,7 +64,7 @@ async function loadMenu(){
   const url = `${API}/menu/${SUBDOMAIN}?cat=${encodeURIComponent(currentCat)}&q=${encodeURIComponent(currentQ)}`;
   const res = await fetch(url);
   if(!res.ok){
-    el('menuList').innerHTML = `<div class="empty-state">Restaurant not found or currently closed.</div>`;
+    el('menuList').innerHTML = `<div class="empty-state">Restaurant not found or currently closed. <a href="/customer/">Choose a different restaurant</a>.</div>`;
     return;
   }
   const data = await res.json();
@@ -149,61 +184,78 @@ function showState(name){
   el('stateConfirm').style.display = name==='confirm' ? 'flex' : 'none';
 }
 
-el('cartToggle').onclick = openCart;
-el('cartOverlay').onclick = closeCart;
-el('closeCart').onclick = closeCart;
-el('closeCart2').onclick = closeCart;
-el('closeCart3').onclick = closeCart;
-el('goToCheckout').onclick = () => showState('checkout');
-el('backToCart').onclick = () => showState('cart');
+function initOrderApp(){
+  document.body.classList.add(THEME_MAP[SUBDOMAIN] || 'theme-italian');
 
-el('searchInput').addEventListener('input', (e)=>{
-  currentQ = e.target.value;
-  clearTimeout(window._searchTimer);
-  window._searchTimer = setTimeout(loadMenu, 300);
-});
+  el('cartToggle').onclick = openCart;
+  el('cartOverlay').onclick = closeCart;
+  el('closeCart').onclick = closeCart;
+  el('closeCart2').onclick = closeCart;
+  el('closeCart3').onclick = closeCart;
+  el('goToCheckout').onclick = () => showState('checkout');
+  el('backToCart').onclick = () => showState('cart');
 
-el('placeOrderBtn').onclick = async () => {
-  const name = el('fName').value.trim();
-  const phone = el('fPhone').value.trim();
-  const address = el('fAddress').value.trim();
-  if(!name || !phone || !address){
-    alert('Please fill in name, phone, and delivery address.');
-    return;
-  }
-  const payload = {
-    subdomain: SUBDOMAIN,
-    name, phone, address,
-    notes: el('fNotes').value.trim(),
-    payment: el('fPayment').value,
-    cart: Object.values(cart)
+  el('searchInput').addEventListener('input', (e)=>{
+    currentQ = e.target.value;
+    clearTimeout(window._searchTimer);
+    window._searchTimer = setTimeout(loadMenu, 300);
+  });
+
+  el('placeOrderBtn').onclick = async () => {
+    const name = el('fName').value.trim();
+    const phone = el('fPhone').value.trim();
+    const address = el('fAddress').value.trim();
+    if(!name || !phone || !address){
+      alert('Please fill in name, phone, and delivery address.');
+      return;
+    }
+    const payload = {
+      subdomain: SUBDOMAIN,
+      name, phone, address,
+      notes: el('fNotes').value.trim(),
+      payment: el('fPayment').value,
+      cart: Object.values(cart)
+    };
+    el('placeOrderBtn').disabled = true;
+    el('placeOrderBtn').textContent = 'Placing order…';
+    try{
+      const res = await fetch(`${API}/checkout`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if(!res.ok) throw new Error(data.error || 'Order failed');
+
+      el('confirmId').textContent = `Order #${data.orderId}`;
+      el('confirmStatus').textContent = 'Received';
+      el('confirmItems').innerHTML = Object.values(cart).map(c =>
+        `<div class="cart-line"><span class="cart-line-name">${c.qty}&times; ${c.name}</span><span>${money(c.price*c.qty)}</span></div>`
+      ).join('');
+      cart = {};
+      updateCartUI();
+      showState('confirm');
+    }catch(err){
+      alert(err.message);
+    }finally{
+      el('placeOrderBtn').disabled = false;
+      el('placeOrderBtn').textContent = 'Place order';
+    }
   };
-  el('placeOrderBtn').disabled = true;
-  el('placeOrderBtn').textContent = 'Placing order…';
-  try{
-    const res = await fetch(`${API}/checkout`, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(payload)
-    });
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Order failed');
 
-    el('confirmId').textContent = `Order #${data.orderId}`;
-    el('confirmStatus').textContent = 'Received';
-    el('confirmItems').innerHTML = Object.values(cart).map(c =>
-      `<div class="cart-line"><span class="cart-line-name">${c.qty}&times; ${c.name}</span><span>${money(c.price*c.qty)}</span></div>`
-    ).join('');
-    cart = {};
-    updateCartUI();
-    showState('confirm');
-  }catch(err){
-    alert(err.message);
-  }finally{
-    el('placeOrderBtn').disabled = false;
-    el('placeOrderBtn').textContent = 'Place order';
-  }
-};
+  updateCartUI();
+  loadMenu();
+}
 
-updateCartUI();
-loadMenu();
+/* ============================================================
+   ENTRY POINT — decide picker vs. order app
+   ============================================================ */
+if(!SUBDOMAIN){
+  el('pickerScreen').style.display = 'block';
+  el('orderApp').style.display = 'none';
+  loadPicker();
+}else{
+  el('pickerScreen').style.display = 'none';
+  el('orderApp').style.display = 'block';
+  initOrderApp();
+}

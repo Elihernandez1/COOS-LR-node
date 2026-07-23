@@ -43,6 +43,90 @@ body.theme-coffee::before{
   background-size:150px 150px;
 }
 
+/* ---------- Restaurant picker screen ---------- */
+#pickerScreen{
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:60px 24px 80px;
+}
+.picker-header{
+  text-align:center;
+  margin-bottom:40px;
+}
+.picker-mark{
+  width:56px; height:56px;
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Space Grotesk',sans-serif;
+  font-weight:700;
+  font-size:18px;
+  color:#161311;
+  background:var(--accent);
+  margin:0 auto 18px;
+}
+.picker-title{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:clamp(26px,5vw,38px);
+  margin:0 0 8px;
+  letter-spacing:-0.01em;
+}
+.picker-sub{
+  color:var(--paper-dim);
+  font-size:14px;
+  margin:0;
+}
+.picker-grid{
+  width:100%;
+  max-width:560px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+.picker-card{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  background:#1e1a17;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:18px 20px;
+  text-decoration:none;
+  color:var(--paper);
+  transition:border-color 0.15s;
+}
+.picker-card:hover{border-color:var(--accent);}
+.picker-card-logo{
+  width:48px; height:48px;
+  border-radius:8px;
+  flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:16px;
+  color:#161311;
+}
+.picker-card-body{flex:1; min-width:0;}
+.picker-card-name{
+  font-family:'Fraunces',serif;
+  font-size:18px;
+  font-weight:500;
+}
+.picker-card-address{
+  font-size:13px;
+  color:var(--paper-dim);
+  margin-top:2px;
+}
+.picker-card-arrow{
+  font-family:'Space Grotesk',sans-serif;
+  font-size:18px;
+  color:var(--paper-dim);
+  flex-shrink:0;
+}
+.picker-card:hover .picker-card-arrow{color:var(--accent);}
+
 /* ---------- Header ---------- */
 header{
   padding:28px 24px 20px;

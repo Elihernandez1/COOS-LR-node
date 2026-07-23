@@ -2,6 +2,23 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
+// GET /api/customer/restaurants — list all active tenants for the picker page
+router.get('/restaurants', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT t.tenant_id, t.name, t.subdomain, t.address,
+             b.primary_color, b.secondary_color, b.logo_text
+      FROM tenants t
+      LEFT JOIN tenant_branding b ON b.tenant_id = t.tenant_id
+      WHERE t.is_active = 1
+      ORDER BY t.name
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 // GET /api/customer/menu/:subdomain — get tenant + menu + branding
 router.get('/menu/:subdomain', async (req, res) => {

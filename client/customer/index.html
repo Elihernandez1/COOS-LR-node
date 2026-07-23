@@ -10,83 +10,100 @@
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <div class="logo-badge" id="logoBadge">?</div>
-    <div>
-      <h1 id="tenantName">Loading&hellip;</h1>
-      <div class="tagline" id="tenantTagline">Fetching menu</div>
-    </div>
+<!-- ============ RESTAURANT PICKER (shown when no ?r= is given) ============ -->
+<div id="pickerScreen">
+  <div class="picker-header">
+    <div class="logo-badge picker-mark">LR</div>
+    <h1 class="picker-title">COOS-LR</h1>
+    <p class="picker-sub">Choose a restaurant to start your order</p>
   </div>
-  <button class="cart-toggle" id="cartToggle">
-    Order ticket <span class="cart-count" id="cartCount">0</span>
-  </button>
-</header>
-
-<main>
-  <div class="controls">
-    <input class="search-input" id="searchInput" placeholder="Search the menu&hellip;" />
+  <div id="pickerGrid" class="picker-grid">
+    <div class="empty-state">Loading restaurants&hellip;</div>
   </div>
-  <div id="catBar" class="controls"></div>
-  <div id="menuList"></div>
-</main>
+</div>
 
-<div class="cart-overlay" id="cartOverlay"></div>
-<div class="cart-drawer" id="cartDrawer">
-  <!-- STATE: cart -->
-  <div id="stateCart" style="display:flex; flex-direction:column; height:100%;">
-    <div class="cart-head">
-      <h2>Your order ticket</h2>
-      <button class="close-cart" id="closeCart">&times;</button>
-    </div>
-    <div class="cart-items" id="cartItems"></div>
-    <div class="cart-foot">
-      <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
-      <button class="checkout-btn" id="goToCheckout">Proceed to checkout</button>
-    </div>
-  </div>
+<!-- ============ ORDER APP (shown when ?r=<subdomain> is present) ============ -->
+<div id="orderApp" style="display:none;">
 
-  <!-- STATE: checkout form -->
-  <div id="stateCheckout" style="display:none; flex-direction:column; height:100%;">
-    <div class="cart-head">
-      <h2>Checkout</h2>
-      <button class="close-cart" id="closeCart2">&times;</button>
-    </div>
-    <div class="sheet-body">
-      <button class="back-link" id="backToCart">&larr; Back to ticket</button>
-      <div class="field"><label>Name</label><input id="fName" /></div>
-      <div class="field"><label>Phone</label><input id="fPhone" /></div>
-      <div class="field"><label>Delivery address</label><input id="fAddress" /></div>
-      <div class="field"><label>Notes (optional)</label><textarea id="fNotes" rows="2"></textarea></div>
-      <div class="field">
-        <label>Payment method</label>
-        <select id="fPayment">
-          <option>Card on file</option>
-          <option>Cash on delivery</option>
-        </select>
+  <header>
+    <div class="brand">
+      <a href="/customer/" class="logo-badge" id="logoBadge" style="text-decoration:none;">?</a>
+      <div>
+        <h1 id="tenantName">Loading&hellip;</h1>
+        <div class="tagline" id="tenantTagline">Fetching menu</div>
       </div>
     </div>
-    <div class="cart-foot">
-      <div class="total-row"><span>Total</span><span id="checkoutTotal">$0.00</span></div>
-      <button class="checkout-btn" id="placeOrderBtn">Place order</button>
-    </div>
-  </div>
+    <button class="cart-toggle" id="cartToggle">
+      Order ticket <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </header>
 
-  <!-- STATE: confirmation -->
-  <div id="stateConfirm" style="display:none; flex-direction:column; height:100%;">
-    <div class="cart-head">
-      <h2>Order placed</h2>
-      <button class="close-cart" id="closeCart3">&times;</button>
+  <main>
+    <div class="controls">
+      <input class="search-input" id="searchInput" placeholder="Search the menu&hellip;" />
     </div>
-    <div class="sheet-body">
-      <div class="confirm-wrap">
-        <div class="stamp">Kitchen has it.</div>
-        <div class="confirm-id" id="confirmId">Order #—</div>
-        <div class="status-pill" id="confirmStatus">Received</div>
-        <div id="confirmItems"></div>
+    <div id="catBar" class="controls"></div>
+    <div id="menuList"></div>
+  </main>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-drawer" id="cartDrawer">
+    <!-- STATE: cart -->
+    <div id="stateCart" style="display:flex; flex-direction:column; height:100%;">
+      <div class="cart-head">
+        <h2>Your order ticket</h2>
+        <button class="close-cart" id="closeCart">&times;</button>
+      </div>
+      <div class="cart-items" id="cartItems"></div>
+      <div class="cart-foot">
+        <div class="total-row"><span>Total</span><span id="cartTotal">$0.00</span></div>
+        <button class="checkout-btn" id="goToCheckout">Proceed to checkout</button>
+      </div>
+    </div>
+
+    <!-- STATE: checkout form -->
+    <div id="stateCheckout" style="display:none; flex-direction:column; height:100%;">
+      <div class="cart-head">
+        <h2>Checkout</h2>
+        <button class="close-cart" id="closeCart2">&times;</button>
+      </div>
+      <div class="sheet-body">
+        <button class="back-link" id="backToCart">&larr; Back to ticket</button>
+        <div class="field"><label>Name</label><input id="fName" /></div>
+        <div class="field"><label>Phone</label><input id="fPhone" /></div>
+        <div class="field"><label>Delivery address</label><input id="fAddress" /></div>
+        <div class="field"><label>Notes (optional)</label><textarea id="fNotes" rows="2"></textarea></div>
+        <div class="field">
+          <label>Payment method</label>
+          <select id="fPayment">
+            <option>Card on file</option>
+            <option>Cash on delivery</option>
+          </select>
+        </div>
+      </div>
+      <div class="cart-foot">
+        <div class="total-row"><span>Total</span><span id="checkoutTotal">$0.00</span></div>
+        <button class="checkout-btn" id="placeOrderBtn">Place order</button>
+      </div>
+    </div>
+
+    <!-- STATE: confirmation -->
+    <div id="stateConfirm" style="display:none; flex-direction:column; height:100%;">
+      <div class="cart-head">
+        <h2>Order placed</h2>
+        <button class="close-cart" id="closeCart3">&times;</button>
+      </div>
+      <div class="sheet-body">
+        <div class="confirm-wrap">
+          <div class="stamp">Kitchen has it.</div>
+          <div class="confirm-id" id="confirmId">Order #&mdash;</div>
+          <div class="status-pill" id="confirmStatus">Received</div>
+          <div id="confirmItems"></div>
+        </div>
       </div>
     </div>
   </div>
+
 </div>
 
 <script src="app.js"></script>
