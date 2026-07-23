@@ -10,19 +10,9 @@
 </head>
 <body>
 
-<!-- ============ RESTAURANT PICKER (shown when no ?r= is given) ============ -->
-<div id="pickerScreen">
-  <div class="picker-header">
-    <div class="logo-badge picker-mark">LR</div>
-    <h1 class="picker-title">COOS-LR</h1>
-    <p class="picker-sub">Choose a restaurant to start your order</p>
-  </div>
-  <div id="pickerGrid" class="picker-grid">
-    <div class="empty-state">Loading restaurants&hellip;</div>
-  </div>
-</div>
+<!-- ============ ORDER APP (this page always expects ?r=<subdomain>; bare visits redirect home) ============ -->
 
-<!-- ============ ORDER APP (shown when ?r=<subdomain> is present) ============ -->
+
 <div id="orderApp" style="display:none;">
 
   <header>

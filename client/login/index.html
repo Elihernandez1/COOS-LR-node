@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COOS-LR | Staff &amp; Admin Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,500&family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loginScreen">
+  <div class="login-card">
+    <a href="/" class="back-link">&larr; Back to ordering</a>
+    <h1>Staff &amp; Admin sign in</h1>
+    <p>Sign in to manage orders, your menu, or the platform.</p>
+
+    <form id="loginForm">
+      <div class="field"><label>Email</label><input id="loginEmail" type="email" required placeholder="staff@luigi.com" /></div>
+      <div class="field"><label>Password</label><input id="loginPassword" type="password" required /></div>
+      <button class="primary-btn" id="loginBtn" type="submit">Sign in</button>
+      <div class="login-error" id="loginError">Invalid email or password.</div>
+    </form>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
