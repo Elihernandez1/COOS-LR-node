@@ -11,6 +11,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+  "node": "24.x"
+},
   "type": "commonjs",
   "dependencies": {
     "bcrypt": "^6.0.0",
