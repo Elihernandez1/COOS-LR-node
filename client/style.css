@@ -68,50 +68,52 @@ a{color:inherit;}
 }
 .picker-grid{
   width:100%;
-  max-width:560px;
+  max-width:640px;
   display:flex;
   flex-direction:column;
-  gap:14px;
-}
-.picker-card{
-  display:flex;
-  align-items:center;
   gap:16px;
-  background:#1e1a17;
+}
+
+/* Picker cards: full-bleed cuisine photo with dark gradient overlay,
+   text sitting at the bottom for legibility over any photo. */
+.picker-card{
+  position:relative;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+  min-height:150px;
   border:1px solid var(--line);
-  border-radius:6px;
-  padding:18px 20px;
+  border-radius:8px;
+  padding:20px 22px;
   text-decoration:none;
   color:var(--paper);
-  transition:border-color 0.15s;
+  background-size:cover;
+  background-position:center;
+  transition:border-color 0.15s, transform 0.15s;
+  overflow:hidden;
 }
-.picker-card:hover{border-color:var(--accent);}
-.picker-card-logo{
-  width:48px; height:48px;
-  border-radius:8px;
-  flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-family:'Fraunces',serif;
-  font-weight:600;
-  font-size:16px;
-  color:#161311;
-}
-.picker-card-body{flex:1; min-width:0;}
+.picker-card:hover{border-color:var(--accent); transform:translateY(-2px);}
+.picker-card-body{position:relative; z-index:1;}
 .picker-card-name{
   font-family:'Fraunces',serif;
-  font-size:18px;
-  font-weight:500;
+  font-size:20px;
+  font-weight:600;
+  text-shadow:0 1px 6px rgba(0,0,0,0.4);
 }
 .picker-card-address{
   font-size:13px;
   color:var(--paper-dim);
-  margin-top:2px;
+  margin-top:3px;
+  text-shadow:0 1px 6px rgba(0,0,0,0.4);
 }
 .picker-card-arrow{
+  position:relative; z-index:1;
   font-family:'Space Grotesk',sans-serif;
   font-size:18px;
-  color:var(--paper-dim);
+  color:var(--paper);
   flex-shrink:0;
+  align-self:flex-end;
 }
 .picker-card:hover .picker-card-arrow{color:var(--accent);}
 
