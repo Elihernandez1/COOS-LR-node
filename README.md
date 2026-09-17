@@ -51,3 +51,8 @@ npm start
 Then open http://localhost:3000
 
 Requires a `.env` file with `DATABASE_URL` and `JWT_SECRET` set (see `.gitignore` — never commit this file).
+
+## Author
+
+Elihut Hernandez — Full Stack Engineer
+[LinkedIn](https://www.linkedin.com/in/elihut-hernandez) · [GitHub](https://github.com/Elihernandez1)
